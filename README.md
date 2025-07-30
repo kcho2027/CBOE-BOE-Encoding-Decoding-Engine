@@ -1,64 +1,83 @@
-# CboeBinaryOrderEntry
+# CBOE BOE Encoding/Decoding Engine
 
-This project provides a C++ implementation for interacting with the Cboe Binary Order Entry (BOE) system that could be used for multiple different order types (ex. Options, Japan Equities, U.S Equities, Europe equities), focusing on efficient serialization and deserialization of BOE messages.
-
-## Table of Contents
-
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Prerequisites](#prerequisites)
-- [Building the Project](#building-the-project)
-- [Running Tests](#running-tests)
-- [Usage](#usage)
-- [Documentation](#documentation)
-- [Coding Style and Linting](#coding-style-and-linting)
-- [Performance Benchmarking](#performance-benchmarking)
-- [Contributing](#contributing)
-- [License](#license)
-
-## Features
-
-- **High-Performance Serialization/Deserialization:** Optimized for low-latency message processing.
-- **Zero-Copy Buffer Handling:** Utilizes `Buffer.h` for efficient memory management.
-- **Modular Design:** Separates concerns into distinct components (Framing, Serialization, Deserialization, Messages).
-- **Comprehensive Test Suite:** Includes unit tests for core functionalities.
-- **Configurable Allocation:** Supports custom memory allocators via `Allocator.h`.
+A high-performance, cross-platform C++ engine for encoding and decoding Cboe Binary Order Entry (BOE) messages, with code generation from YAML spec, zero-copy support, and CI/CD integration.
 
 ## Project Structure
 
-The project is organized as follows:
-
 ```
-CboeBinaryOrderEntry/
-├── CMakeLists.txt              # Top-level build configuration for the entire project
-├── README.md                   # This overview document
-├── docs/                       # Project documentation
-│   └── US_Options_BOE_Specification.pdf # Original Cboe US Options BOE Specification (for reference)
-├── include/                    # Public header files
-│   └── cboe/                   # Cboe specific headers
-│       ├── FramingEngine.h     # Handles BOE frame header/trailer, versioning, and checksums
-│       ├── Serializer.h        # High-level interface for serializing Cboe BOE messages
-│       ├── Deserializer.h      # High-level interface for deserializing Cboe BOE messages
-│       ├── Message.h           # C++ struct definitions for all supported BOE messages
-│       ├── Buffer.h            # Wrapper for zero-copy buffer operations
-│       └── Allocator.h         # Abstract interface for custom memory allocators
-├── src/                        # Source code files
-│   ├── FramingEngine.cpp       # Implementation for FramingEngine.h
-│   ├── Serializer.cpp          # Implementation for Serializer.h
-│   ├── Deserializer.cpp        # Implementation for Deserializer.h
-│   ├── Message.cpp             # Implementation for Message.h (if any, e.g., static data)
-│   └── main.cpp                # Optional command-line interface (CLI) or demonstration application
-├── tests/                      # Unit and integration tests
-│   ├── CMakeLists.txt          # CMake build configuration for the test suite
-│   ├── SerializerTests.cpp     # Google Test suite for various message serialization scenarios
-│   ├── DeserializerTests.cpp   # Google Test suite for various message deserialization scenarios
-│   └── FramingEngineTests.cpp  # Google Test suite for FramingEngine functionality
-├── tools/                      # Development tools and scripts
-│   ├── .clang-format           # ClangFormat configuration for consistent code styling
-│   └── .clang-tidy             # ClangTidy configuration for static analysis and linting
-│   └── scripts/                # Utility scripts
-│       ├── run_tests.sh        # Script to build and execute all tests
-│       └── bench_latency.sh    # Script for throughput and latency benchmarking
-└── .gitignore                  # Specifies intentionally untracked files to ignore
-
+.
+├── codegen/                      # YAML → C++ code generator
+│   ├── cboe_spec.yaml            # Full spec in YAML
+│   └── codegen.py                # Emits headers + sources
+│
+├── engine/                       # Core C++ library
+│   ├── include/cboe/             # Public API headers
+│   │   ├── Messages.h            # Generated structs
+│   │   ├── Serializer.h          # Declarations
+│   │   ├── Deserializer.h
+│   │   ├── Util.h                # Helpers (append_uint, read_uint…)
+│   │   └── FramingEngine.h       # Framing/versioning API
+│   │
+│   ├── src/                      # Core implementation
+│   │   ├── Serializer.cpp        # Generated serialize defs
+│   │   ├── Deserializer.cpp      # Generated parse defs
+│   │   ├── FramingEngine.cpp     # Sync bytes, length, checksum
+│   │   ├── Buffer.cpp            # Zero-copy buffer implementation
+│   │   └── Allocator.cpp         # Pluggable memory pool
+│   │
+│   └── CMakeLists.txt            # Build library
+│
+├── tests/                        # Unit, integration & bench
+│   ├── SerializerTests.cpp       # GoogleTest round-trip
+│   ├── FramingEngineTests.cpp
+│   └── Benchmark.cpp             # Google Benchmark harness
+│
+├── ui/ (optional)                # Spec editor / dashboard
+│   ├── web/ReactApp/             # React + Tailwind dashboard
+│   └── cli/                      # Python Typer CLI for spec regen
+│
+├── scripts/                      # Helpers
+│   ├── run_codegen.sh            # codegen → engine/
+│   ├── run_tests.sh              # build & run all tests
+│   └── bench_latency.sh          # perf harness
+│
+├── .github/workflows/            # CI: codegen, build, tests, benchmarks
+│   ├── build.yml
+│   └── benchmark.yml
+│
+├── Dockerfile                    # containerize engine + tools
+└── README.md
 ```
+
+## Quick Start
+
+1. Install Python dependencies:
+   ```sh
+   pip install -r codegen/requirements.txt
+   ```
+2. Generate C++ code from YAML spec:
+   ```sh
+   ./scripts/run_codegen.sh
+   ```
+3. Build the engine:
+   ```sh
+   cd engine && mkdir build && cd build && cmake .. && make -j
+   ```
+4. Run tests:
+   ```sh
+   ./scripts/run_tests.sh
+   ```
+
+## Features
+
+- High-throughput, low-latency encode/decode
+- Zero-copy buffer support
+- Pluggable allocator
+- Codegen from YAML spec
+- Cross-platform (Linux, macOS, Windows)
+- CI/CD, code coverage, benchmarks
+- (Optional) UI/dashboard for spec editing and monitoring
+
+## License
+
+MIT

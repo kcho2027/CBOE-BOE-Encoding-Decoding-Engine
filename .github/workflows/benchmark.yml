@@ -1,0 +1,33 @@
+name: Benchmark
+
+on:
+  schedule:
+    - cron: "0 2 * * *" # every day at 2am UTC
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - name: Install Python dependencies
+        run: pip install -r codegen/requirements.txt
+      - name: Run codegen
+        run: ./scripts/run_codegen.sh
+      - name: Set up C++
+        uses: actions/setup-cpp@v2
+        with:
+          compiler: gcc
+      - name: Build
+        run: |
+          cd engine
+          mkdir build
+          cd build
+          cmake ..
+          make -j
+      - name: Run benchmarks
+        run: ./scripts/bench_latency.sh

@@ -2,7 +2,9 @@
 #include <cstdint>
 #include <array>
 
-// Message: NewOrder (type 0x01)
+namespace cboe {
+
+// Generated struct for NewOrder
 struct NewOrder {
     uint64 order_id; // 8 bytes
     char[8] symbol; // 8 bytes
@@ -12,7 +14,7 @@ struct NewOrder {
     uint64 timestamp; // 8 bytes
 };
 
-// Message: ModifyOrder (type 0x02)
+// Generated struct for ModifyOrder
 struct ModifyOrder {
     uint64 order_id; // 8 bytes
     uint32 new_quantity; // 4 bytes
@@ -20,3 +22,4 @@ struct ModifyOrder {
     uint64 timestamp; // 8 bytes
 };
 
+} // namespace cboe

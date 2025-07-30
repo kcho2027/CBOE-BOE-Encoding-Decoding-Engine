@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 codegen.py: Generate C++ BOE modules from a YAML spec.
 Usage: python3 codegen.py cboe_spec.yaml output_dir/
@@ -13,8 +14,9 @@ def camel_to_snake(name):
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
 
-def emit_header(out, msg):
-    out.write(f"// Message: {msg['name']} (type 0x{msg['type']:02X})\n")
+def emit_message_struct(out, msg):
+    # Emit C++ struct for each message
+    out.write(f"// Generated struct for {msg['name']}\n")
     out.write(f"struct {msg['name']} {{\n")
     for f in msg['fields']:
         out.write(
@@ -22,32 +24,46 @@ def emit_header(out, msg):
     out.write("};\n\n")
 
 
-def emit_serializer(out, msg):
+def emit_serializer_decl(out, msg):
+    name = msg["name"]
+    out.write(f"std::vector<uint8_t> serialize{name}(const {name}& m);\n")
+
+
+def emit_deserializer_decl(out, msg):
+    name = msg["name"]
+    snake = camel_to_snake(name)
+    out.write(f"{name} parse_{snake}(const uint8_t* data, size_t len);\n")
+
+
+def emit_serializer_def(out, msg):
     name = msg['name']
-    func = f"serialize_{camel_to_snake(name)}"
-    out.write(f"std::vector<uint8_t> {func}(const {name}& m) {{\n")
-    out.write("    std::vector<uint8_t> buf; buf.reserve(/* calc length */);\n")
-    out.write("    // Frame header\n")
-    out.write("    buf.push_back(0xBA); buf.push_back(0xBA); // sync\n")
-    out.write(f"    buf.push_back(0x{msg['type']:02X}); // message type\n")
-    for f in msg['fields']:
-        sn = camel_to_snake(f['name'])
-        if f['type'].startswith('uint'):
-            out.write(f"    append_uint(buf, m.{sn}, {f['size']});\n")
+    snake = camel_to_snake(name)
+    out.write(
+        f"#include \"cboe/Serializer.h\"\n#include <vector>\n#include \"util.h\"\n\n")
+    out.write(
+        f"std::vector<uint8_t> cboe::serialize{name}(const cboe::{name}& m) {{\n")
+    out.write("    std::vector<uint8_t> buf;\n")
+    out.write("    // framing, fields...\n")
+    for fld in msg['fields']:
+        field_snake = camel_to_snake(fld['name'])
+        if fld['type'].startswith('uint'):
+            out.write(
+                f"    append_uint(buf, m.{field_snake}, {fld['size']});\n")
         else:
-            out.write(f"    append_bytes(buf, m.{sn});\n")
-    out.write("    // TODO: checksum/trailer\n")
-    out.write("    return buf;\n")
-    out.write("}\n\n")
+            out.write(
+                f"    append_bytes(buf, m.{field_snake}, {fld['size']});\n")
+    out.write("    return buf;\n}\n\n")
 
 
-def emit_deserializer(out, msg):
+def emit_deserializer_def(out, msg):
     name = msg['name']
-    func = f"parse_{camel_to_snake(name)}"
-    out.write(f"{name} {func}(const uint8_t* data, size_t len) {{\n")
+    snake = camel_to_snake(name)
+    out.write(
+        f"#include \"cboe/Deserializer.h\"\n#include \"util.h\"\n#include <vector>\n\n")
+    out.write(
+        f"cboe::{name} cboe::parse_{snake}(const uint8_t* data, size_t len) {{\n")
     out.write(f"    {name} m; size_t pos = 0;\n")
-    out.write("    // skip sync & type header\n")
-    out.write("    pos += 3;\n")
+    out.write("    // skip framing header\n    pos += 3;\n")
     for f in msg['fields']:
         sn = camel_to_snake(f['name'])
         if f['type'].startswith('uint'):
@@ -56,34 +72,95 @@ def emit_deserializer(out, msg):
         else:
             out.write(
                 f"    read_bytes(data + pos, m.{sn}, {f['size']}); pos += {f['size']};\n")
-    out.write("    return m;\n")
-    out.write("}\n\n")
+    out.write("    return m;\n}\n\n")
 
 
 def main():
     if len(sys.argv) != 3:
-        print("Usage: codegen.py spec.yaml out_dir/")
+        print("Usage: codegen.py spec.yaml /path/to/engine/")
         sys.exit(1)
 
-    spec_file, out_dir = sys.argv[1], sys.argv[2]
+    spec_file, engine_root = sys.argv[1], sys.argv[2]
     with open(spec_file) as f:
         spec = yaml.safe_load(f)
 
-    os.makedirs(out_dir, exist_ok=True)
-    hdr_path = os.path.join(out_dir, 'Messages.h')
-    src_path = os.path.join(out_dir, 'Serializer.cpp')
+    # Setup directories
+    inc_dir = os.path.join(engine_root, "include", "cboe")
+    src_dir = os.path.join(engine_root, "src")
+    os.makedirs(inc_dir, exist_ok=True)
+    os.makedirs(src_dir, exist_ok=True)
 
-    with open(hdr_path, 'w') as h, open(src_path, 'w') as c:
+    # Open output files
+    with open(os.path.join(inc_dir, "Messages.h"), "w") as fh_msg, \
+            open(os.path.join(inc_dir, "Serializer.h"), "w") as fh_ser_h, \
+            open(os.path.join(inc_dir, "Deserializer.h"), "w") as fh_deser_h, \
+            open(os.path.join(inc_dir, "util.h"), "w") as fh_util, \
+            open(os.path.join(inc_dir, "FramingEngine.h"), "w") as fh_frame_h, \
+            open(os.path.join(src_dir, "Serializer.cpp"), "w") as fs_ser, \
+            open(os.path.join(src_dir, "Deserializer.cpp"), "w") as fs_deser, \
+            open(os.path.join(src_dir, "FramingEngine.cpp"), "w") as fs_frame:
+
+        # Util header
+        fh_util.write("""#pragma once
+#include <cstdint>
+#include <vector>
+#include <cstring>
+
+inline void append_uint(std::vector<uint8_t>& buf, uint64_t v, size_t s) { for(size_t i=0;i<s;++i){ buf.push_back(v & 0xFF); v >>= 8; } }
+inline void append_bytes(std::vector<uint8_t>& buf, const void* d, size_t s){ buf.insert(buf.end(), (uint8_t*)d, (uint8_t*)d+s); }
+inline uint64_t read_uint(const uint8_t* d, size_t s){ uint64_t v=0; for(size_t i=0;i<s;++i) v |= (uint64_t(d[i]) << (8*i)); return v; }
+inline void read_bytes(const uint8_t* d, void* dst, size_t s){ memcpy(dst,d,s); }
+""")
+
+        # FramingEngine stubs
+        fh_frame_h.write("""#pragma once
+#include <vector>
+#include <cstdint>
+namespace cboe {
+struct FramingEngine {
+    static std::vector<uint8_t> wrapMessage(const std::vector<uint8_t>& body);
+    static bool unwrapMessage(const uint8_t* data, size_t len, std::vector<uint8_t>& out);
+};
+} // namespace cboe
+""")
+        fs_frame.write("""#include "cboe/FramingEngine.h"
+// TODO: implement wrapMessage (sync bytes, length, checksum) and unwrapMessage
+""")
+
         # Headers
-        h.write('#pragma once\n#include <cstdint>\n#include <array>\n\n')
-        c.write('#include "Messages.h"\n#include <vector>\n#include "Util.h"\n\n')
+        fh_msg.write("""#pragma once
+#include <cstdint>
+#include <array>
 
-        for msg in spec['messages']:
-            emit_header(h, msg)
-            emit_serializer(c, msg)
-            emit_deserializer(c, msg)
+namespace cboe {
 
-    print(f"Generated: {hdr_path}, {src_path}")
+""")
+        fh_ser_h.write("""#pragma once
+#include <vector>
+#include "cboe/Messages.h"
+#include "util.h"
+
+namespace cboe {
+
+""")
+        fh_deser_h.write("""#pragma once
+#include "cboe/Messages.h"
+#include "util.h"
+
+namespace cboe {
+
+""")
+
+        for msg in spec.get("messages", []):
+            emit_message_struct(fh_msg, msg)
+            emit_serializer_decl(fh_ser_h, msg)
+            emit_deserializer_decl(fh_deser_h, msg)
+            emit_serializer_def(fs_ser, msg)
+            emit_deserializer_def(fs_deser, msg)
+
+        fh_msg.write("} // namespace cboe\n")
+        fh_ser_h.write("} // namespace cboe\n")
+        fh_deser_h.write("} // namespace cboe\n")
 
 
 if __name__ == '__main__':
