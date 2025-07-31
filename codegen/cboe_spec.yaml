@@ -1,142 +1,283 @@
 version: 1
 messages:
-  # ————————————————————————
-  # Session-level (Member ↔ Cboe)
-  # ————————————————————————
+  # Session-level messages (Member ↔ Cboe)
   - name: LoginRequest
     type: 0x37
     description: "Session logon request"
     fields:
-      - StartOfMessage:    { type: binary, length: 2, description: "Must be 0xBA 0xBA" }
-      - MessageLength:     { type: binary, length: 2, description: "Bytes in message (incl. this field)" }
-      - MessageType:       { type: binary, length: 1, description: "0x37" }
-      - MatchingUnit:      { type: binary, length: 1, description: "Always 0 for inbound session messages" }
-      - SequenceNumber:    { type: binary, length: 4, description: "Always 0 for session messages" }
-      - SessionSubID:      { type: alphanumeric, length: 4, description: "Session Sub ID supplied by Cboe" }
-      - Username:          { type: alphanumeric, length: 4, description: "Username supplied by Cboe" }
-      - Password:          { type: alphanumeric, length: 10, description: "Password supplied by Cboe" }
-      - NumberOfParamGroups:{ type: binary, length: 1, description: "Number of parameter groups to follow" }
-      # + variable-length Parameter Groups (Unit Sequences, Return Bitfields, etc.) :contentReference[oaicite:7]{index=7}
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x37"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Always 0 for inbound session messages"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Always 0 for session messages"
+      - name: SessionSubID
+        type: alphanumeric
+        length: 4
+        description: "Session Sub ID supplied by Cboe"
+      - name: Username
+        type: alphanumeric
+        length: 4
+        description: "Username supplied by Cboe"
+      - name: Password
+        type: alphanumeric
+        length: 10
+        description: "Password supplied by Cboe"
+      - name: NumberOfParamGroups
+        type: binary
+        length: 1
+        description: "Number of parameter groups to follow"
 
   - name: LogoutRequest
     type: 0x02
     description: "Session logout request"
     fields:
-      - StartOfMessage:  { type: binary, length: 2, description: "Must be 0xBA 0xBA" }
-      - MessageLength:   { type: binary, length: 2, description: "Bytes in message (incl. this field)" }
-      - MessageType:     { type: binary, length: 1, description: "0x02" }
-      - MatchingUnit:    { type: binary, length: 1, description: "Always 0 for inbound session messages" }
-      - SequenceNumber:  { type: binary, length: 4, description: "Always 0 for session messages" } :contentReference[oaicite:8]{index=8}
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x02"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Always 0 for inbound session messages"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Always 0 for session messages"
 
   - name: ClientHeartbeat
     type: 0x03
     description: "Heartbeat from client"
     fields:
-      - StartOfMessage:  { type: binary, length: 2, description: "Must be 0xBA 0xBA" }
-      - MessageLength:   { type: binary, length: 2, description: "Bytes in message (incl. this field)" }
-      - MessageType:     { type: binary, length: 1, description: "0x03" }
-      - MatchingUnit:    { type: binary, length: 1, description: "Always 0 for inbound session messages" }
-      - SequenceNumber:  { type: binary, length: 4, description: "Always 0 for session messages" } :contentReference[oaicite:9]{index=9}
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x03"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Always 0 for inbound session messages"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Always 0 for session messages"
 
   - name: LoginResponse
     type: 0x24
     description: "Session logon response"
     fields:
-      - StartOfMessage:      { type: binary, length: 2, description: "Must be 0xBA 0xBA" }
-      - MessageLength:       { type: binary, length: 2, description: "Bytes in message (incl. this field)" }
-      - MessageType:         { type: binary, length: 1, description: "0x24" }
-      - MatchingUnit:        { type: binary, length: 1, description: "Always 0 for session messages" }
-      - SequenceNumber:      { type: binary, length: 4, description: "Always 0 for session messages" }
-      - LoginResponseStatus: { type: alphanumeric, length: 1,
-                              description: 
-                                "A=Accepted, N=Not authorized, D=Disabled, B=In use, "+
-                                "S=Invalid session, Q=Seq ahead, I=Invalid unit, F=Invalid bitfield, "+
-                                "M=Bad structure" }
-      - LoginResponseText:   { type: text, length: 60,
-                              description: "Human-readable status or failure reason (ASCII NUL-padded)" }
-      - NoUnspecifiedUnitReplay:{ type: binary, length: 1, description: "Echoed NoUnspec flag from request" }
-      - LastReceivedSequenceNumber:{ type: binary, length: 4,
-                                    description: "Last inbound msg seq processed by Cboe" }
-      - NumberOfUnits:       { type: binary, length: 1,
-                              description: "Number of unit/sequence pairs to follow" }
-      # + per-unit UnitNumber & UnitSequence pairs  
-      - NumberOfParamGroups: { type: binary, length: 1, description: "Echoed from LoginRequest" }
-      # + echoed Parameter Groups :contentReference[oaicite:10]{index=10}
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x24"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Always 0 for session messages"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Always 0 for session messages"
+      - name: LoginResponseStatus
+        type: alphanumeric
+        length: 1
+        description: "A=Accepted, N=Not authorized, D=Disabled, B=In use, S=Invalid session, Q=Seq ahead, I=Invalid unit, F=Invalid bitfield, M=Bad structure"
+      - name: LoginResponseText
+        type: text
+        length: 60
+        description: "Human-readable status or failure reason (ASCII NUL-padded)"
+      - name: NoUnspecifiedUnitReplay
+        type: binary
+        length: 1
+        description: "Echoed NoUnspec flag from request"
+      - name: LastReceivedSequenceNumber
+        type: binary
+        length: 4
+        description: "Last inbound msg seq processed by Cboe"
+      - name: NumberOfUnits
+        type: binary
+        length: 1
+        description: "Number of unit/sequence pairs to follow"
+      - name: NumberOfParamGroups
+        type: binary
+        length: 1
+        description: "Echoed from LoginRequest"
 
   - name: Logout
     type: 0x08
     description: "Session logout notification"
     fields:
-      - StartOfMessage:    { type: binary, length: 2, description: "Must be 0xBA 0xBA" }
-      - MessageLength:     { type: binary, length: 2, description: "Bytes in message (incl. this field)" }
-      - MessageType:       { type: binary, length: 1, description: "0x08" }
-      - MatchingUnit:      { type: binary, length: 1, description: "Always 0 for session messages" }
-      - SequenceNumber:    { type: binary, length: 4, description: "Always 0 for session messages" }
-      - LogoutReason:      { type: alphanumeric, length: 1,
-                             description: "U=User, E=EOD, A=Admin, !=Protocol Violation" }
-      - LogoutReasonText:  { type: text, length: 60,
-                             description: "Free-form reason if Protocol Violation" }
-      - LastReceivedSequenceNumber:{ type: binary, length: 4,
-                                    description: "Last inbound msg seq processed by Cboe" }
-      - NumberOfUnits:     { type: binary, length: 1,
-                             description: "Number of unit/sequence pairs to follow" }
-      # + per-unit UnitNumber & UnitSequence pairs :contentReference[oaicite:11]{index=11}
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x08"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Always 0 for session messages"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Always 0 for session messages"
+      - name: LogoutReason
+        type: alphanumeric
+        length: 1
+        description: "U=User, E=EOD, A=Admin, !=Protocol Violation"
+      - name: LogoutReasonText
+        type: text
+        length: 60
+        description: "Free-form reason if Protocol Violation"
+      - name: LastReceivedSequenceNumber
+        type: binary
+        length: 4
+        description: "Last inbound msg seq processed by Cboe"
+      - name: NumberOfUnits
+        type: binary
+        length: 1
+        description: "Number of unit/sequence pairs to follow"
 
   - name: ServerHeartbeat
     type: 0x09
     description: "Heartbeat from server"
     fields:
-      - StartOfMessage:  { type: binary, length: 2, description: "Must be 0xBA 0xBA" }
-      - MessageLength:   { type: binary, length: 2, description: "Bytes in message (incl. this field)" }
-      - MessageType:     { type: binary, length: 1, description: "0x09" }
-      - MatchingUnit:    { type: binary, length: 1, description: "Always 0 for session messages" }
-      - SequenceNumber:  { type: binary, length: 4, description: "Always 0 for session messages" } :contentReference[oaicite:12]{index=12}
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x09"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Always 0 for inbound session messages"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Always 0 for session messages"
 
   - name: ReplayComplete
     type: 0x13
     description: "End of replayed messages"
     fields:
-      - StartOfMessage:  { type: binary, length: 2, description: "Must be 0xBA 0xBA" }
-      - MessageLength:   { type: binary, length: 2, description: "Bytes in message (incl. this field)" }
-      - MessageType:     { type: binary, length: 1, description: "0x13" }
-      - MatchingUnit:    { type: binary, length: 1, description: "Always 0 for session messages" }
-      - SequenceNumber:  { type: binary, length: 4, description: "Always 0 for session messages" } :contentReference[oaicite:13]{index=13}
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x13"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Always 0 for inbound session messages"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Always 0 for session messages"
 
+  # Order Management Messages
   - name: NewOrder
     type: 0x38
     description: "Submit a new order"
     fields:
       - name: StartOfMessage
         type: binary
-        size: 2
+        length: 2
+        description: "Must be 0xBA 0xBA"
       - name: MessageLength
         type: binary
-        size: 2
+        length: 2
+        description: "Bytes in message (incl. this field)"
       - name: MessageType
         type: binary
-        size: 1
+        length: 1
+        description: "0x38"
       - name: MatchingUnit
         type: binary
-        size: 1
+        length: 1
+        description: "Always 0 for inbound"
       - name: SequenceNumber
         type: binary
-        size: 4
+        length: 4
+        description: "Inbound message sequence"
       - name: ClOrdID
-        type: char[20]
-        size: 20
+        type: text
+        length: 20
+        description: "Client order ID"
       - name: Side
-        type: char
-        size: 1
+        type: alphanumeric
+        length: 1
+        description: "1=Buy, 2=Sell"
       - name: OrderQty
-        type: uint32
-        size: 4
+        type: binary
+        length: 4
+        description: "Contract quantity"
       - name: NumberOfNewOrderBitfields
-        type: uint8
-        size: 1
+        type: binary
+        length: 1
+        description: "Count of bitfields to follow"
       - name: NewOrderBitfield
-        type: binary[]
-        size: NumberOfNewOrderBitfields × 1
-        description: "Each bitfield indicates one optional field present"
+        type: binary
+        length: 1
+        repeater: NumberOfNewOrderBitfields
+        description: "Each bitfield flags an optional field"
 
   - name: CancelOrder
     type: 0x39
@@ -144,515 +285,1076 @@ messages:
     fields:
       - name: StartOfMessage
         type: binary
-        size: 2
+        length: 2
+        description: "Must be 0xBA 0xBA"
       - name: MessageLength
         type: binary
-        size: 2
+        length: 2
+        description: "Bytes in message (incl. this field)"
       - name: MessageType
         type: binary
-        size: 1
+        length: 1
+        description: "0x39"
       - name: MatchingUnit
         type: binary
-        size: 1
+        length: 1
+        description: "Always 0 for inbound"
       - name: SequenceNumber
         type: binary
-        size: 4
+        length: 4
+        description: "Inbound message sequence"
       - name: OrigClOrdID
-        type: char[20]
-        size: 20
+        type: text
+        length: 20
         description: "ClOrdID of order to cancel; all zeros for mass cancel"
       - name: NumberOfCancelOrderBitfields
-        type: uint8
-        size: 1
+        type: binary
+        length: 1
+        description: "Count of bitfields to follow"
       - name: CancelOrderBitfield
-        type: binary[]
-        size: NumberOfCancelOrderBitfields × 1
-        description: "Each bitfield indicates one optional field present"
+        type: binary
+        length: 1
+        repeater: NumberOfCancelOrderBitfields
+        description: "Each bitfield flags an optional field"
 
   - name: ModifyOrder
     type: 0x3A
     description: "Modify an existing order"
     fields:
-      - StartOfMessage:              { type: binary, length: 2 }
-      - MessageLength:               { type: binary, length: 2 }
-      - MessageType:                 { type: binary, length: 1 }
-      - MatchingUnit:                { type: binary, length: 1 }
-      - SequenceNumber:              { type: binary, length: 4 }
-      - ClOrdID:                     { type: text,   length: 20 }
-      - OrigClOrdID:                 { type: text,   length: 20 }
-      - NumberOfModifyOrderBitfields:{ type: binary, length: 1 }
-      - ModifyOrderBitfield:         { type: binary, length: 1, repeater: NumberOfModifyOrderBitfields }
-    optionalFields:
-      - ClearingFirm:         { type: alphanumeric, length: 4 }
-      - OrderQty:             { type: binary,       length: 4 }
-      - Price:                { type: binary,       length: 8 }
-      - OrdType:              { type: alphanumeric, length: 1 }
-      - CancelOrigOnReject:   { type: binary,       length: 1 }
-      - ExecInst:             { type: binary,       length: 1 }
-      - MaxFloor:             { type: binary,       length: 1 }
-      - StopPx:               { type: binary,       length: 8 }
-      - RoutingFirmID:        { type: text,         length: 4 }
-      - ManualOrderIndicator: { type: binary,       length: 1 }
-      - OperatorID:           { type: text,         length: 6 }
-      - FrequentTraderID:     { type: text,         length: 6 }
-      - LocateBroker:         { type: text,         length: 4 }
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x3A"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Always 0 for inbound"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Inbound message sequence"
+      - name: ClOrdID
+        type: text
+        length: 20
+        description: "Client order ID"
+      - name: OrigClOrdID
+        type: text
+        length: 20
+        description: "Original client order ID"
+      - name: NumberOfModifyOrderBitfields
+        type: binary
+        length: 1
+        description: "Count of bitfields to follow"
+      - name: ModifyOrderBitfield
+        type: binary
+        length: 1
+        repeater: NumberOfModifyOrderBitfields
+        description: "Each bitfield flags an optional field"
 
   - name: NewOrderCross
     type: 0x41
     description: "Submit an order cross"
     fields:
-      - StartOfMessage:                    { type: binary, length: 2 }
-      - MessageLength:                     { type: binary, length: 2 }
-      - MessageType:                       { type: binary, length: 1 }
-      - MatchingUnit:                      { type: binary, length: 1 }
-      - SequenceNumber:                    { type: binary, length: 4 }
-      - CrossID:                           { type: text,   length: 20 }
-      - CrossType:                         { type: alphanumeric, length: 1 }
-      - CrossPrioritization:               { type: alphanumeric, length: 1 }
-      - Price:                             { type: binary, length: 8 }
-      - OrderQty:                          { type: binary, length: 4 }
-      - NumberOfNewOrderCrossBitfields:    { type: binary, length: 1 }
-      - NewOrderCrossBitfield:             { type: binary, length: 1, repeater: NumberOfNewOrderCrossBitfields }
-      - GroupCnt:                          { type: binary, length: 2 }
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x41"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Always 0 for inbound"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Inbound message sequence"
+      - name: CrossID
+        type: text
+        length: 20
+        description: "Cross identifier"
+      - name: CrossType
+        type: alphanumeric
+        length: 1
+        description: "Cross type"
+      - name: CrossPrioritization
+        type: alphanumeric
+        length: 1
+        description: "Agency side priority"
+      - name: Price
+        type: binary
+        length: 8
+        description: "Cross price"
+      - name: OrderQty
+        type: binary
+        length: 4
+        description: "Total quantity"
+      - name: NumberOfNewOrderCrossBitfields
+        type: binary
+        length: 1
+        description: "Count of bitfields to follow"
+      - name: NewOrderCrossBitfield
+        type: binary
+        length: 1
+        repeater: NumberOfNewOrderCrossBitfields
+        description: "Each bitfield flags an optional field"
+      - name: GroupCnt
+        type: binary
+        length: 2
+        description: "Number of legs in the cross"
     repeatingGroup:
-      - Side:         { type: alphanumeric, length: 1 }
-      - AllocQty:     { type: binary,       length: 4 }
-      - ClOrdID:      { type: text,         length: 20 }
-      - Capacity:     { type: alphanumeric, length: 1 }
-      - OpenClose:    { type: alphanumeric, length: 1 }
-      - ClearingFirm: { type: text,         length: 4 }
-    optionalFields:
-      - Symbol:        { type: text,   length: 8 }
-      - TargetPartyID: { type: text,   length: 4 }
-      - CMTANumber:    { type: binary, length: 4 }
-      - ClearingAccount:{ type: text,  length: 4 }
-      - Account:       { type: text,   length: 16 }
-      - GiveUpFirmID:  { type: text,   length: 4 }
+      - name: Side
+        type: alphanumeric
+        length: 1
+        description: "1=Buy, 2=Sell"
+      - name: AllocQty
+        type: binary
+        length: 4
+        description: "Quantity for this leg"
+      - name: ClOrdID
+        type: text
+        length: 20
+        description: "Client order ID for this leg"
+      - name: Capacity
+        type: alphanumeric
+        length: 1
+        description: "Order capacity"
+      - name: OpenClose
+        type: alphanumeric
+        length: 1
+        description: "O=Open, C=Close"
+      - name: ClearingFirm
+        type: text
+        length: 4
+        description: "Clearing firm"
 
+  # Quote Management Messages
   - name: QuoteUpdate
     type: 0x55
     description: "Enter or update one or more quotes"
     fields:
-      - StartOfMessage:    { type: binary, length: 2 }
-      - MessageLength:     { type: binary, length: 2 }
-      - MessageType:       { type: binary, length: 1 }
-      - MatchingUnit:      { type: binary, length: 1 }
-      - SequenceNumber:    { type: binary, length: 4 }
-      - QuoteUpdateID:     { type: text,   length: 16 }
-      - ClearingFirm:      { type: alpha,  length: 4 }
-      - ClearingAccount:   { type: alpha,  length: 4 }
-      - CMTANumber:        { type: binary, length: 4 }
-      - Account:           { type: text,   length: 16 }
-      - CustomGroupID:     { type: binary, length: 2 }
-      - Capacity:          { type: alpha,  length: 1 }
-      - Reserved:          { type: binary, length: 15 }
-      - SendTime:          { type: datetime, length: 8 }
-      - PostingInstruction:{ type: text,   length: 1 }
-      - SessionEligibility:{ type: text,   length: 1 }
-      - QuoteCnt:          { type: binary, length: 1 }
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x55"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Always 0 for inbound"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Inbound message sequence"
+      - name: QuoteUpdateID
+        type: text
+        length: 16
+        description: "Quote update identifier"
+      - name: ClearingFirm
+        type: alphanumeric
+        length: 4
+        description: "Clearing firm"
+      - name: ClearingAccount
+        type: alphanumeric
+        length: 4
+        description: "Clearing account"
+      - name: CMTANumber
+        type: binary
+        length: 4
+        description: "CMTA number"
+      - name: Account
+        type: text
+        length: 16
+        description: "Account"
+      - name: CustomGroupID
+        type: binary
+        length: 2
+        description: "Custom group ID"
+      - name: Capacity
+        type: alphanumeric
+        length: 1
+        description: "Order capacity"
+      - name: Reserved
+        type: binary
+        length: 15
+        description: "Reserved field"
+      - name: SendTime
+        type: datetime
+        length: 8
+        description: "Send time"
+      - name: PostingInstruction
+        type: text
+        length: 1
+        description: "Posting instruction"
+      - name: SessionEligibility
+        type: text
+        length: 1
+        description: "Session eligibility"
+      - name: QuoteCnt
+        type: binary
+        length: 1
+        description: "Number of quotes"
     repeatingGroup:
-      - Symbol:            { type: alphanumeric, length: 6 }
-      - Side:              { type: text,         length: 1 }
-      - OpenClose:         { type: text,         length: 1 }
-      - Price:             { type: binary,       length: 8 }
-      - OrderQty:          { type: binary,       length: 4 }
-      - Reserved:          { type: binary,       length: 2 }
-:contentReference[oaicite:8]{index=8} :contentReference[oaicite:9]{index=9}
-
-  - name: ResetRisk
-    type: 0x56
-    description: "Reset or release firm, risk-root or custom-group lockouts"
-    fields:
-      - StartOfMessage:     { type: binary,   length: 2 }
-      - MessageLength:      { type: binary,   length: 2 }
-      - MessageType:        { type: binary,   length: 1 }
-      - MatchingUnit:       { type: binary,   length: 1 }
-      - SequenceNumber:     { type: binary,   length: 4 }
-      - RiskStatusID:       { type: text,     length: 16 }
-      - RiskReset:          { type: text,     length: 8 }
-      - TargetMatchingUnit: { type: binary,   length: 1 }
-      - Reserved:           { type: binary,   length: 3 }
-      - ClearingFirm:       { type: alpha,    length: 4 }
-      - RiskRoot:           { type: alphanumeric, length: 6 }
-      - CustomGroupID:      { type: binary,   length: 2 }
- :contentReference[oaicite:10]{index=10}
+      - name: Symbol
+        type: alphanumeric
+        length: 6
+        description: "Symbol"
+      - name: Side
+        type: text
+        length: 1
+        description: "Side"
+      - name: OpenClose
+        type: text
+        length: 1
+        description: "Open/Close"
+      - name: Price
+        type: binary
+        length: 8
+        description: "Price"
+      - name: OrderQty
+        type: binary
+        length: 4
+        description: "Order quantity"
+      - name: Reserved
+        type: binary
+        length: 2
+        description: "Reserved field"
 
   - name: QuoteUpdateShort
     type: 0x59
     description: "Compact version of QuoteUpdate"
     fields:
-      - StartOfMessage:  { type: binary, length: 2 }
-      - MessageLength:   { type: binary, length: 2 }
-      - MessageType:     { type: binary, length: 1 }
-      - MatchingUnit:    { type: binary, length: 1 }
-      - SequenceNumber:  { type: binary, length: 4 }
-      - QuoteUpdateID:   { type: text,   length: 16 }
-      - ClearingFirm:    { type: alpha,  length: 4 }
-      - ClearingAccount: { type: alpha,  length: 4 }
-      - CustomGroupID:   { type: binary, length: 2 }
-      - Capacity:        { type: alpha,  length: 1 }
-      - Reserved:        { type: binary, length: 3 }
-      - SendTime:        { type: datetime, length: 8 }
-      - PostingInstruction:{ type: text, length: 1 }
-      - SessionEligibility:{ type: text, length: 1 }
-      - QuoteCnt:        { type: binary, length: 1 }
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x59"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Always 0 for inbound"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Inbound message sequence"
+      - name: QuoteUpdateID
+        type: text
+        length: 16
+        description: "Quote update identifier"
+      - name: ClearingFirm
+        type: alphanumeric
+        length: 4
+        description: "Clearing firm"
+      - name: ClearingAccount
+        type: alphanumeric
+        length: 4
+        description: "Clearing account"
+      - name: CustomGroupID
+        type: binary
+        length: 2
+        description: "Custom group ID"
+      - name: Capacity
+        type: alphanumeric
+        length: 1
+        description: "Order capacity"
+      - name: Reserved
+        type: binary
+        length: 3
+        description: "Reserved field"
+      - name: SendTime
+        type: datetime
+        length: 8
+        description: "Send time"
+      - name: PostingInstruction
+        type: text
+        length: 1
+        description: "Posting instruction"
+      - name: SessionEligibility
+        type: text
+        length: 1
+        description: "Session eligibility"
+      - name: QuoteCnt
+        type: binary
+        length: 1
+        description: "Number of quotes"
     repeatingGroup:
-      - Symbol:         { type: alphanumeric, length: 6 }
-      - Side:           { type: text,         length: 1 }
-      - OpenClose:      { type: text,         length: 1 }
-      - Price:          { type: binary,       length: 4 }
-      - OrderQty:       { type: binary,       length: 2 }
-      - Reserved:       { type: binary,       length: 2 }
-:contentReference[oaicite:11]{index=11} :contentReference[oaicite:12]{index=12}
+      - name: Symbol
+        type: alphanumeric
+        length: 6
+        description: "Symbol"
+      - name: Side
+        type: text
+        length: 1
+        description: "Side"
+      - name: OpenClose
+        type: text
+        length: 1
+        description: "Open/Close"
+      - name: Price
+        type: binary
+        length: 4
+        description: "Price"
+      - name: OrderQty
+        type: binary
+        length: 2
+        description: "Order quantity"
+      - name: Reserved
+        type: binary
+        length: 2
+        description: "Reserved field"
 
-  - name: PurgeOrders
-    type: 0x47
-    description: "Mass-cancel or purge orders on a port"
+  # Complex Order Messages
+  - name: NewComplexOrder
+    type: 0x4B
+    description: "Submit a new multi-leg (complex) order"
     fields:
-      - StartOfMessage:      { type: binary, length: 2 }
-      - MessageLength:       { type: binary, length: 2 }
-      - MessageType:         { type: binary, length: 1 }
-      - MatchingUnit:        { type: binary, length: 1 }
-      - SequenceNumber:      { type: binary, length: 4 }
-      - Reserved:            { type: binary, length: 1 }
-      - NumberOfPurge:       { type: binary, length: 1 }
-      - PurgeOrdersBitfields:{ type: binary, repeater: NumberOfPurge, length: 1 }
-      - CustomGroupIDCnt:    { type: binary, length: 1 }
-      - ClearingFirm:        { type: alpha,  length: 4 }
-      - MassCancelInst:      { type: text,   length: 20 }
-      - RiskRoot:            { type: alphanumeric, length: 6 }
-      - MassCancelID:        { type: text,   length: 20 }
-      - SendTime:            { type: datetime, length: 8 }
-:contentReference[oaicite:13]{index=13}
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message, incl. this field (excl. StartOfMessage)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x4B"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Always 0 for inbound"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Inbound message sequence"
+      - name: ClOrdID
+        type: text
+        length: 20
+        description: "Client order ID"
+      - name: Side
+        type: alphanumeric
+        length: 1
+        description: "1=Buy, 2=Sell"
+      - name: OrderQty
+        type: binary
+        length: 4
+        description: "Contract quantity"
+      - name: NumberOfNewComplexOrderBitfields
+        type: binary
+        length: 1
+        description: "Count of bitfields to follow"
+      - name: NewComplexOrderBitfield
+        type: binary
+        length: 1
+        repeater: NumberOfNewComplexOrderBitfields
+        description: "Each bitfield flags an optional field"
+      - name: NoLegs
+        type: binary
+        length: 1
+        description: "Number of repeating ComplexLeg groups (2–16)"
+    repeatingGroup:
+      - name: LegPositionEffect
+        type: alphanumeric
+        length: 1
+        description: "O=Open, C=Close, N=None"
+      - name: Symbol
+        type: text
+        length: 8
+        description: "Leg symbol (OSI or Cboe format)"
+      - name: Price
+        type: binary
+        length: 8
+        description: "Leg price"
+      - name: OrderQty
+        type: binary
+        length: 4
+        description: "Leg quantity"
 
   - name: NewComplexInstrument
     type: 0x4C
     description: "Define a new multi-leg instrument"
     fields:
-      - StartOfMessage:                       { type: binary,   length: 2 }
-      - MessageLength:                        { type: binary,   length: 2 }
-      - MessageType:                          { type: binary,   length: 1 }
-      - MatchingUnit:                         { type: binary,   length: 1 }
-      - SequenceNumber:                       { type: binary,   length: 4 }
-      - ClOrdID:                              { type: text,     length: 20 }
-      - NumberOfNewComplexInstrumentBitfields:{ type: binary,   length: 1 }
-      - NewComplexInstrumentBitfield:         { type: binary,   repeater: NumberOfNewComplexInstrumentBitfields, length: 1 }
-      - NoLegs:                               { type: binary,   length: 1 }
-      # …plus optional and leg-repeating fields per spec
-:contentReference[oaicite:14]{index=14}
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x4C"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Always 0 for inbound"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Inbound message sequence"
+      - name: ClOrdID
+        type: text
+        length: 20
+        description: "Client order ID"
+      - name: NumberOfNewComplexInstrumentBitfields
+        type: binary
+        length: 1
+        description: "Count of bitfields to follow"
+      - name: NewComplexInstrumentBitfield
+        type: binary
+        length: 1
+        repeater: NumberOfNewComplexInstrumentBitfields
+        description: "Each bitfield flags an optional field"
+      - name: NoLegs
+        type: binary
+        length: 1
+        description: "Number of legs"
 
-  - name: NewComplexOrder
-    type: 0x4B
-    description: "Submit a new multi-leg (complex) order"
+  # Risk Management Messages
+  - name: ResetRisk
+    type: 0x56
+    description: "Reset or release firm, risk-root or custom-group lockouts"
     fields:
-      - StartOfMessage:                 { type: binary, length: 2, description: "Must be 0xBA 0xBA" }
-      - MessageLength:                  { type: binary, length: 2, description: "Bytes in message, incl. this field (excl. StartOfMessage)" }
-      - MessageType:                    { type: binary, length: 1, description: "0x4B" }
-      - MatchingUnit:                   { type: binary, length: 1, description: "Always 0 for inbound" }
-      - SequenceNumber:                 { type: binary, length: 4, description: "Inbound message sequence" }
-      - ClOrdID:                        { type: text,   length: 20, description: "Client order ID" }
-      - Side:                           { type: alphanumeric, length: 1, description: "1=Buy, 2=Sell" }
-      - OrderQty:                       { type: binary, length: 4, description: "Contract quantity" }
-      - NumberOfNewComplexOrderBitfields: { type: binary, length: 1, description: "Count of bitfields to follow" }
-      - NewComplexOrderBitfield:        { type: binary, length: 1, repeater: NumberOfNewComplexOrderBitfields, description: "Each bitfield flags an optional field" }
-      - NoLegs:                         { type: binary, length: 1, description: "Number of repeating ComplexLeg groups (2–16)" }
-    repeatingGroup:  # repeat this block NoLegs times
-      - LegPositionEffect:             { type: alphanumeric, length: 1, description: "O=Open, C=Close, N=None" }
-      - Symbol:                        { type: char[8], length: 8, description: "Leg symbol (OSI or Cboe format)" }
-      - Price:                         { type: binary, length: 8, description: "Leg price" }
-      - OrderQty:                      { type: binary, length: 4, description: "Leg quantity" }
-      # …plus any optional per-leg fields when flagged in the bitmaps :contentReference[oaicite:3]{index=3}:contentReference[oaicite:4]{index=4}
-messages:
-  - name: NewOrderCrossMultileg
-    type: 0x5A
-    description: "Submit a new multi-leg cross order"
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x56"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Always 0 for inbound"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Inbound message sequence"
+      - name: RiskStatusID
+        type: text
+        length: 16
+        description: "Risk status ID"
+      - name: RiskReset
+        type: text
+        length: 8
+        description: "Risk reset"
+      - name: TargetMatchingUnit
+        type: binary
+        length: 1
+        description: "Target matching unit"
+      - name: Reserved
+        type: binary
+        length: 3
+        description: "Reserved field"
+      - name: ClearingFirm
+        type: alphanumeric
+        length: 4
+        description: "Clearing firm"
+      - name: RiskRoot
+        type: alphanumeric
+        length: 6
+        description: "Risk root"
+      - name: CustomGroupID
+        type: binary
+        length: 2
+        description: "Custom group ID"
+
+  # Purge Messages
+  - name: PurgeOrders
+    type: 0x47
+    description: "Mass-cancel or purge orders on a port"
     fields:
-      - StartOfMessage:                       { type: binary, length: 2, description: "Must be 0xBA 0xBA" }
-      - MessageLength:                        { type: binary, length: 2, description: "Bytes in message, incl. this field" }
-      - MessageType:                          { type: binary, length: 1, description: "0x5A" }
-      - MatchingUnit:                         { type: binary, length: 1, description: "Always 0 for inbound" }
-      - SequenceNumber:                       { type: binary, length: 4, description: "Inbound sequence number" }
-      - CrossType:                            { type: alphanumeric, length: 1, description: "Cross type" }
-      - CrossPrioritization:                  { type: alphanumeric, length: 1, description: "Agency side priority" }
-      - Price:                                { type: binary, length: 8, description: "Cross price" }
-      - OrderQty:                             { type: binary, length: 4, description: "Total quantity" }
-      - NumberOfNewOrderCrossMultilegBitfields: { type: binary, length: 1, description: "Count of bitfields to follow" }
-      - NewOrderCrossMultilegBitfield:        { type: binary, length: 1, repeater: NumberOfNewOrderCrossMultilegBitfields, description: "Each bitfield flags an optional field" }
-      - GroupCnt:                             { type: binary, length: 2, description: "Number of legs in the cross (2–11)" }
-    repeatingGroup:  # repeat this block GroupCnt times
-      - Side:                                 { type: alphanumeric, length: 1, description: "1=Buy, 2=Sell" }
-      - AllocQty:                             { type: binary, length: 4, description: "Quantity for this leg" }
-      - ClOrdID:                              { type: text,   length: 20, description: "Client order ID for this leg" }
-      - Capacity:                             { type: alphanumeric, length: 1, description: "Order capacity" }
-      - OpenClose:                            { type: alphanumeric, length: 1, description: "O=Open, C=Close" }
-      - GiveUpFirmID:                        { type: char[4], length: 4, description: "Give-up firm" }
-      # …plus optional per-leg fields when flagged in the bitmaps :contentReference[oaicite:5]{index=5}    
-  # —————————————————————————————
-  # Cboe → Member Application Messages
-  # —————————————————————————————
-messages:
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x47"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Always 0 for inbound"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Inbound message sequence"
+      - name: Reserved
+        type: binary
+        length: 1
+        description: "Reserved field"
+      - name: NumberOfPurge
+        type: binary
+        length: 1
+        description: "Number of purge orders"
+      - name: PurgeOrdersBitfields
+        type: binary
+        length: 1
+        repeater: NumberOfPurge
+        description: "Purge order bitfields"
+      - name: CustomGroupIDCnt
+        type: binary
+        length: 1
+        description: "Custom group ID count"
+      - name: ClearingFirm
+        type: alphanumeric
+        length: 4
+        description: "Clearing firm"
+      - name: MassCancelInst
+        type: text
+        length: 20
+        description: "Mass cancel instruction"
+      - name: RiskRoot
+        type: alphanumeric
+        length: 6
+        description: "Risk root"
+      - name: MassCancelID
+        type: text
+        length: 20
+        description: "Mass cancel ID"
+      - name: SendTime
+        type: datetime
+        length: 8
+        description: "Send time"
+
+  # Response Messages (Cboe → Member)
   - name: OrderAcknowledgment
     type: 0x25
     description: "Ack for NewOrder/NewComplexOrder (ExecType=0)"
     fields:
-      - StartOfMessage:        { type: binary,   length: 2, description: "Must be 0xBA 0xBA" }
-      - MessageLength:         { type: binary,   length: 2, description: "Bytes in message (incl. this field)" }
-      - MessageType:           { type: binary,   length: 1, description: "0x25" }
-      - MatchingUnit:          { type: binary,   length: 1, description: "Matching unit ID" }
-      - SequenceNumber:        { type: binary,   length: 4, description: "Per-unit seq no." }
-      - TransactionTime:       { type: datetime, length: 8, description: "Engine event time" }
-      - ClOrdID:               { type: text,     length: 20, description: "Echoed client ID" }
-      - OrderID:               { type: binary,   length: 8, description: "Order ID assigned by engine" }
-      - ReservedInternal:      { type: binary,   length: 1, description: "Reserved (ignore)" }
-      - NumberOfReturnBitfields: { type: binary, length: 1, description: "Count of return bitfields" }
-      - ReturnBitfield¹…ⁿ:     { type: binary,   length: 1, repeater: NumberOfReturnBitfields,
-                                description: "Each bitfield flags an optional field returned" }
-      # + Optional fields as set in the return bitmaps  
-    :contentReference[oaicite:5]{index=5} :contentReference[oaicite:6]{index=6}
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x25"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Matching unit ID"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Per-unit seq no."
+      - name: TransactionTime
+        type: datetime
+        length: 8
+        description: "Engine event time"
+      - name: ClOrdID
+        type: text
+        length: 20
+        description: "Echoed client ID"
+      - name: OrderID
+        type: binary
+        length: 8
+        description: "Order ID assigned by engine"
+      - name: ReservedInternal
+        type: binary
+        length: 1
+        description: "Reserved (ignore)"
+      - name: NumberOfReturnBitfields
+        type: binary
+        length: 1
+        description: "Count of return bitfields"
+      - name: ReturnBitfield
+        type: binary
+        length: 1
+        repeater: NumberOfReturnBitfields
+        description: "Each bitfield flags an optional field returned"
 
   - name: OrderRejected
     type: 0x26
     description: "Reject for NewOrder (ExecType=8)"
     fields:
-      - StartOfMessage:        { type: binary,   length: 2 }
-      - MessageLength:         { type: binary,   length: 2 }
-      - MessageType:           { type: binary,   length: 1, description: "0x26" }
-      - MatchingUnit:          { type: binary,   length: 1, description: "Always 0 (unsequenced)" }
-      - SequenceNumber:        { type: binary,   length: 4, description: "Always 0" }
-      - TransactionTime:       { type: datetime, length: 8 }
-      - ClOrdID:               { type: text,     length: 20 }
-      - OrderRejectReason:     { type: text,     length: 1 }
-      - Text:                  { type: text,     length: 60, description: "Human-readable reason" }
-      - ReservedInternal:      { type: binary,   length: 1 }
-      - NumberOfReturnBitfields:{ type: binary,  length: 1 }
-      - ReturnBitfield¹…ⁿ:     { type: binary,   length: 1, repeater: NumberOfReturnBitfields }
-      # + Optional fields per return bitmaps  
-    :contentReference[oaicite:7]{index=7} :contentReference[oaicite:8]{index=8}
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x26"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Always 0 (unsequenced)"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Always 0"
+      - name: TransactionTime
+        type: datetime
+        length: 8
+        description: "Engine event time"
+      - name: ClOrdID
+        type: text
+        length: 20
+        description: "Client order ID"
+      - name: OrderRejectReason
+        type: text
+        length: 1
+        description: "Reject reason"
+      - name: Text
+        type: text
+        length: 60
+        description: "Human-readable reason"
+      - name: ReservedInternal
+        type: binary
+        length: 1
+        description: "Reserved (ignore)"
+      - name: NumberOfReturnBitfields
+        type: binary
+        length: 1
+        description: "Count of return bitfields"
+      - name: ReturnBitfield
+        type: binary
+        length: 1
+        repeater: NumberOfReturnBitfields
+        description: "Each bitfield flags an optional field returned"
 
   - name: OrderModified
     type: 0x27
     description: "Ack for ModifyOrder (ExecType=5)"
     fields:
-      - StartOfMessage:        { type: binary,   length: 2 }
-      - MessageLength:         { type: binary,   length: 2 }
-      - MessageType:           { type: binary,   length: 1, description: "0x27" }
-      - MatchingUnit:          { type: binary,   length: 1 }
-      - SequenceNumber:        { type: binary,   length: 4 }
-      - TransactionTime:       { type: datetime, length: 8 }
-      - ClOrdID:               { type: text,     length: 20 }
-      - OrderID:               { type: binary,   length: 8 }
-      - OrigClOrdID:           { type: text,     length: 20 }
-      - NumberOfReturnBitfields:{ type: binary,  length: 1 }
-      - ReturnBitfield¹…ⁿ:     { type: binary,   length: 1, repeater: NumberOfReturnBitfields }
-      # + Optional fields per return bitmaps
-
-  - name: OrderRestated
-    type: 0x28
-    description: "Server restatement of an order"
-    fields:
-      - StartOfMessage, MessageLength, MessageType, MatchingUnit, SequenceNumber as above
-      - TransactionTime:       { type: datetime, length: 8 }
-      - ClOrdID:               { type: text,     length: 20 }
-      - OrderID:               { type: binary,   length: 8 }
-      - NumberOfReturnBitfields:{ type: binary,  length: 1 }
-      - ReturnBitfield¹…ⁿ:     { type: binary,   length: 1, repeater: NumberOfReturnBitfields }
-      # + Optional fields per return bitmaps
-
-  - name: UserModifyRejected
-    type: 0x29
-    description: "ModifyOrder rejection (ExecType=8)"
-    fields:
-      - StartOfMessage, MessageLength, MessageType, MatchingUnit, SequenceNumber
-      - TransactionTime:       { type: datetime, length: 8 }
-      - ClOrdID:               { type: text,     length: 20 }
-      - OrigClOrdID:           { type: text,     length: 20 }
-      - RejectReason:         { type: text,     length: 1 }
-      - Text:                  { type: text,     length: 60 }
-      - ReservedInternal, NumberOfReturnBitfields, ReturnBitfield¹…ⁿ
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x27"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Matching unit ID"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Per-unit seq no."
+      - name: TransactionTime
+        type: datetime
+        length: 8
+        description: "Engine event time"
+      - name: ClOrdID
+        type: text
+        length: 20
+        description: "Client order ID"
+      - name: OrderID
+        type: binary
+        length: 8
+        description: "Order ID assigned by engine"
+      - name: OrigClOrdID
+        type: text
+        length: 20
+        description: "Original client order ID"
+      - name: NumberOfReturnBitfields
+        type: binary
+        length: 1
+        description: "Count of return bitfields"
+      - name: ReturnBitfield
+        type: binary
+        length: 1
+        repeater: NumberOfReturnBitfields
+        description: "Each bitfield flags an optional field returned"
 
   - name: OrderCancelled
     type: 0x2A
     description: "Indicates an order was cancelled"
     fields:
-      - StartOfMessage, MessageLength, MessageType, MatchingUnit, SequenceNumber
-      - TransactionTime:       { type: datetime, length: 8 }
-      - ClOrdID:               { type: text,     length: 20 }
-      - OrderID:               { type: binary,   length: 8 }
-      - CancelReason:          { type: text,     length: 1 }
-      - ReservedInternal, NumberOfReturnBitfields, ReturnBitfield¹…ⁿ
-
-  - name: CrossOrderAcknowledgment
-    type: 0x43
-    description: "Ack for NewOrderCross (ExecType=0)"
-    fields:
-      - StartOfMessage, MessageLength, MessageType, MatchingUnit, SequenceNumber
-      - TransactionTime:       { type: datetime, length: 8 }
-      - CrossID:               { type: text,     length: 20 }
-      - AuctionId:             { type: binary,   length: 8 }
-      - ReservedInternal, NumberOfReturnBitfields, ReturnBitfield¹…ⁿ
-      - GroupCnt:              { type: binary,   length: 2 }
-      - RepeatingGroup (×GroupCnt):
-          - ClOrdID:           { type: text,     length: 20 }
-          - OrderID:           { type: binary,   length: 8 }
-          # + Optional per-leg fields per return bitmaps  
-
-  - name: CrossOrderRejected
-    type: 0x44
-    description: "Reject for NewOrderCross"
-    fields:
-      - Same core header + TransactionTime
-      - CrossID, RejectReason (text[1]), Text (text[60])
-      - ReservedInternal, NumberOfReturnBitfields, ReturnBitfield¹…ⁿ
-
-  - name: CrossOrderCancelled
-    type: 0x46
-    description: "Cross cancel confirmation"
-    fields:
-      - Header + TransactionTime
-      - CrossID
-      - CancelReason
-      - ReservedInternal, NumberOfReturnBitfields, ReturnBitfield¹…ⁿ
-
-  - name: CancelRejected
-    type: 0x2B
-    description: "CancelOrder rejection"
-    fields:
-      - Header + TransactionTime
-      - OrigClOrdID (text[20])
-      - RejectReason (text[1])
-      - Text (text[60])
-      - ReservedInternal, NumberOfReturnBitfields, ReturnBitfield¹…ⁿ
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x2A"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Matching unit ID"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Per-unit seq no."
+      - name: TransactionTime
+        type: datetime
+        length: 8
+        description: "Engine event time"
+      - name: ClOrdID
+        type: text
+        length: 20
+        description: "Client order ID"
+      - name: OrderID
+        type: binary
+        length: 8
+        description: "Order ID assigned by engine"
+      - name: CancelReason
+        type: text
+        length: 1
+        description: "Cancel reason"
+      - name: ReservedInternal
+        type: binary
+        length: 1
+        description: "Reserved (ignore)"
+      - name: NumberOfReturnBitfields
+        type: binary
+        length: 1
+        description: "Count of return bitfields"
+      - name: ReturnBitfield
+        type: binary
+        length: 1
+        repeater: NumberOfReturnBitfields
+        description: "Each bitfield flags an optional field returned"
 
   - name: OrderExecution
     type: 0x2C
     description: "ExecutionReport (fill)"
     fields:
-      - StartOfMessage, MessageLength, MessageType, MatchingUnit, SequenceNumber
-      - TransactionTime:       { type: datetime, length: 8 }
-      - ExecID:                { type: text,     length: 16 }
-      - ClOrdID, OrderID as above
-      - ExecType:              { type: text,     length: 1 }
-      - LastQty:               { type: binary,   length: 4 }
-      - LastPx:                { type: binary,   length: 8 }
-      - LeavesQty, CumQty:     { type: binary,   length: 4 }
-      - AvgPx:                 { type: binary,   length: 8 }
-      - OrdStatus:             { type: text,     length: 1 }
-      - ReservedInternal, NumberOfReturnBitfields, ReturnBitfield¹…ⁿ
-
-  - name: TradeCancelOrCorrect
-    type: 0x2D
-    description: "Cancel or correct a trade"
-    fields:
-      - Header + TransactionTime
-      - ExecID, OrigExecID (text[16])
-      - CorrectionType (text[1])
-      - Quantity, Price as binary
-      - ReservedInternal, NumberOfReturnBitfields, ReturnBitfield¹…ⁿ
-
-  - name: PurgeRejected
-    type: 0x48
-    description: "Reject for PurgeOrders"
-    fields:
-      - Header + TransactionTime
-      - RejectReason (text[1])
-      - Text (text[60])
-      - ReservedInternal, NumberOfReturnBitfields, ReturnBitfield¹…ⁿ
-
-  - name: MassCancelAcknowledgment
-    type: 0x36
-    description: "Ack for mass-cancel request"
-    fields:
-      - Header + TransactionTime
-      - MassCancelID (text[20])
-      - MassCancelStatus (text[1])
-      - ReservedInternal, NumberOfReturnBitfields, ReturnBitfield¹…ⁿ
-
-  - name: ComplexInstrumentAccepted
-    type: 0x4D
-    description: "Complex instrument definition accepted"
-    fields:
-      - Header + TransactionTime
-      - ClOrdID (text[20])
-      - ReservedInternal, NumberOfReturnBitfields, ReturnBitfield¹…ⁿ
-
-  - name: ComplexInstrumentRejected
-    type: 0x4E
-    description: "Complex instrument definition rejected"
-    fields:
-      - Header + TransactionTime
-      - ClOrdID, RejectReason, Text
-      - ReservedInternal, NumberOfReturnBitfields, ReturnBitfield¹…ⁿ
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x2C"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Matching unit ID"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Per-unit seq no."
+      - name: TransactionTime
+        type: datetime
+        length: 8
+        description: "Engine event time"
+      - name: ExecID
+        type: text
+        length: 16
+        description: "Execution ID"
+      - name: ClOrdID
+        type: text
+        length: 20
+        description: "Client order ID"
+      - name: OrderID
+        type: binary
+        length: 8
+        description: "Order ID assigned by engine"
+      - name: ExecType
+        type: text
+        length: 1
+        description: "Execution type"
+      - name: LastQty
+        type: binary
+        length: 4
+        description: "Last quantity"
+      - name: LastPx
+        type: binary
+        length: 8
+        description: "Last price"
+      - name: LeavesQty
+        type: binary
+        length: 4
+        description: "Leaves quantity"
+      - name: CumQty
+        type: binary
+        length: 4
+        description: "Cumulative quantity"
+      - name: AvgPx
+        type: binary
+        length: 8
+        description: "Average price"
+      - name: OrdStatus
+        type: text
+        length: 1
+        description: "Order status"
+      - name: ReservedInternal
+        type: binary
+        length: 1
+        description: "Reserved (ignore)"
+      - name: NumberOfReturnBitfields
+        type: binary
+        length: 1
+        description: "Count of return bitfields"
+      - name: ReturnBitfield
+        type: binary
+        length: 1
+        repeater: NumberOfReturnBitfields
+        description: "Each bitfield flags an optional field returned"
 
   - name: QuoteUpdateAcknowledgment
     type: 0x51
     description: "Ack for QuoteUpdate/Complex QuoteUpdate"
     fields:
-      - StartOfMessage, MessageLength, MessageType=0x51
-      - MatchingUnit:          { type: binary,   length: 1, description: "Always 0" }
-      - SequenceNumber:        { type: binary,   length: 4, description: "Always 0" }
-      - TransactionTime:       { type: datetime, length: 8 }
-      - QuoteUpdateID:         { type: text,     length: 16 }
-      - QuoteRejectReason:     { type: text,     length: 1 }
-      - Reserved:              { type: binary,   length: 17 }
-      - QuoteCnt:              { type: binary,   length: 1 }
-      - RepeatingGroup (×QuoteCnt):
-          - OrderID:           { type: binary,   length: 8 }
-          - QuoteResult:       { type: text,     length: 1 }
-          - SubLiquidityIndicator, Subreason, Reserved
-    :contentReference[oaicite:9]{index=9}
-
-  - name: QuoteRestated
-    type: 0x52
-    description: "Server restatement of a quote"
-    fields:
-      - As per QuoteUpdateAcknowledgment, with ExecType and bitmaps
-
-  - name: QuoteCancelled
-    type: 0x53
-    description: "Indicates a quote was cancelled"
-    fields:
-      - As per QuoteUpdateAcknowledgment, with CancelReason
-
-  - name: QuoteExecution
-    type: 0x54
-    description: "Execution on a resting quote"
-    fields:
-      - Header + TransactionTime
-      - QuoteID (text[16])
-      - ExecID, LastShares, LastPx, LeavesQty, Side
-      - ReservedInternal, NumberOfReturnBitfields, ReturnBitfield¹…ⁿ
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x51"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Always 0"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Always 0"
+      - name: TransactionTime
+        type: datetime
+        length: 8
+        description: "Engine event time"
+      - name: QuoteUpdateID
+        type: text
+        length: 16
+        description: "Quote update ID"
+      - name: QuoteRejectReason
+        type: text
+        length: 1
+        description: "Quote reject reason"
+      - name: Reserved
+        type: binary
+        length: 17
+        description: "Reserved field"
+      - name: QuoteCnt
+        type: binary
+        length: 1
+        description: "Number of quotes"
+    repeatingGroup:
+      - name: OrderID
+        type: binary
+        length: 8
+        description: "Order ID"
+      - name: QuoteResult
+        type: text
+        length: 1
+        description: "Quote result"
+      - name: SubLiquidityIndicator
+        type: text
+        length: 1
+        description: "Sub liquidity indicator"
+      - name: Subreason
+        type: text
+        length: 1
+        description: "Sub reason"
+      - name: Reserved
+        type: binary
+        length: 1
+        description: "Reserved field"
 
   - name: RiskResetAcknowledgment
     type: 0x57
     description: "Ack for ResetRisk"
     fields:
-      - Header + TransactionTime
-      - RiskStatusID (text[16])
-      - RiskReset (text[8])
-      - ReservedInternal, NumberOfReturnBitfields, ReturnBitfield¹…ⁿ
-
-  - name: QuoteUpdateRejected
-    type: 0x58
-    description: "Reject for QuoteUpdate"
-    fields:
-      - Same as QuoteUpdateAcknowledgment with a non-space QuoteRejectReason and Text
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x57"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Matching unit ID"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Per-unit seq no."
+      - name: TransactionTime
+        type: datetime
+        length: 8
+        description: "Engine event time"
+      - name: RiskStatusID
+        type: text
+        length: 16
+        description: "Risk status ID"
+      - name: RiskReset
+        type: text
+        length: 8
+        description: "Risk reset"
+      - name: ReservedInternal
+        type: binary
+        length: 1
+        description: "Reserved (ignore)"
+      - name: NumberOfReturnBitfields
+        type: binary
+        length: 1
+        description: "Count of return bitfields"
+      - name: ReturnBitfield
+        type: binary
+        length: 1
+        repeater: NumberOfReturnBitfields
+        description: "Each bitfield flags an optional field returned"
 
   - name: FloorTradeNotification
     type: 0x5C
     description: "Notification of a floor‐reported trade"
     fields:
-      - StartOfMessage, MessageLength, MessageType=0x5C, MatchingUnit, SequenceNumber
-      - TradeID:               { type: text,   length: 16 }
-      - Symbol, Side, OrderQty, Price
-      - FloorTraderAcronym, FloorTradeTime, Timestamp
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x5C"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Matching unit ID"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Per-unit seq no."
+      - name: TradeID
+        type: text
+        length: 16
+        description: "Trade ID"
+      - name: Symbol
+        type: text
+        length: 8
+        description: "Symbol"
+      - name: Side
+        type: text
+        length: 1
+        description: "Side"
+      - name: OrderQty
+        type: binary
+        length: 4
+        description: "Order quantity"
+      - name: Price
+        type: binary
+        length: 8
+        description: "Price"
+      - name: FloorTraderAcronym
+        type: text
+        length: 4
+        description: "Floor trader acronym"
+      - name: FloorTradeTime
+        type: datetime
+        length: 8
+        description: "Floor trade time"
+      - name: Timestamp
+        type: datetime
+        length: 8
+        description: "Timestamp"
 
   - name: PurgeNotification
     type: 0x07
     description: "Notification that all orders on a port have been purged"
     fields:
-      - StartOfMessage, MessageLength, MessageType=0x07, MatchingUnit, SequenceNumber
-      - PortID:                { type: text,   length: 4 }
-      - PurgeReason:           { type: text,   length: 2 }
-      - Timestamp:             { type: datetime, length: 8 }
-
-
+      - name: StartOfMessage
+        type: binary
+        length: 2
+        description: "Must be 0xBA 0xBA"
+      - name: MessageLength
+        type: binary
+        length: 2
+        description: "Bytes in message (incl. this field)"
+      - name: MessageType
+        type: binary
+        length: 1
+        description: "0x07"
+      - name: MatchingUnit
+        type: binary
+        length: 1
+        description: "Matching unit ID"
+      - name: SequenceNumber
+        type: binary
+        length: 4
+        description: "Per-unit seq no."
+      - name: PortID
+        type: text
+        length: 4
+        description: "Port ID"
+      - name: PurgeReason
+        type: text
+        length: 2
+        description: "Purge reason"
+      - name: Timestamp
+        type: datetime
+        length: 8
+        description: "Timestamp"
