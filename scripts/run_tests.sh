@@ -23,9 +23,9 @@ echo "Building project..."
 make -j$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)
 
 echo "Running tests..."
-if [ -f "cboe_tests" ]; then
+if [ -f "tests/cboe_tests" ]; then
     echo "Running unit tests..."
-    ./cboe_tests --gtest_output=xml:test_results.xml
+    ./tests/cboe_tests --gtest_output=xml:test_results.xml
     
     # Display test summary
     if [ $? -eq 0 ]; then

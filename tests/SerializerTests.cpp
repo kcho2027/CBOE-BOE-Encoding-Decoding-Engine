@@ -39,9 +39,9 @@ TEST_F(SerializerTests, LoginRequestRoundTrip) {
     auto parsed = parse_login_request(serialized.data(), serialized.size());
     
     // Verify round-trip
-    EXPECT_STREQ(parsed.session_sub_id, "TEST");
-    EXPECT_STREQ(parsed.username, "USER");
-    EXPECT_STREQ(parsed.password, "PASS12345");
+    EXPECT_EQ(std::string(parsed.session_sub_id, 4), "TEST");
+    EXPECT_EQ(std::string(parsed.username, 4), "USER");
+    EXPECT_EQ(std::string(parsed.password, 9), "PASS12345");
     EXPECT_EQ(parsed.number_of_param_groups[0], 1);
 }
 

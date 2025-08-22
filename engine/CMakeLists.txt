@@ -1,49 +1,48 @@
 cmake_minimum_required(VERSION 3.16)
-project(CBOE_BOE_Engine VERSION 1.0.0 LANGUAGES CXX)
+project(cboe_core VERSION 1.0.0 LANGUAGES CXX)
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Build type
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release)
-endif()
+# Set compiler flags
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -O2")
 
-# Compiler flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
-set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -DDEBUG")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+# Find required packages
+find_package(GTest REQUIRED)
+find_package(benchmark QUIET)
+
+# If benchmark not found via find_package, try manual search
+if(NOT benchmark_FOUND)
+    find_library(BENCHMARK_LIBRARY NAMES benchmark)
+    find_path(BENCHMARK_INCLUDE_DIR NAMES benchmark/benchmark.h)
+    if(BENCHMARK_LIBRARY AND BENCHMARK_INCLUDE_DIR)
+        set(benchmark_FOUND TRUE)
+    endif()
+endif()
 
 # Create the main library
 add_library(cboe_core
-    src/Serializer.cpp
+    src/Allocator.cpp
+    src/Buffer.cpp
     src/Deserializer.cpp
     src/FramingEngine.cpp
-    src/Buffer.cpp
-    src/Allocator.cpp
+    src/Serializer.cpp
 )
 
 # Set library properties
 set_target_properties(cboe_core PROPERTIES
     VERSION ${PROJECT_VERSION}
     SOVERSION 1
-    PUBLIC_HEADER include/cboe/*.h
+    PUBLIC_HEADER "include/cboe/Allocator.h;include/cboe/Buffer.h;include/cboe/Deserializer.h;include/cboe/FramingEngine.h;include/cboe/Messages.h;include/cboe/Serializer.h;include/cboe/util.h"
 )
 
-# Include directories
-target_include_directories(cboe_core 
+# Set include directories
+target_include_directories(cboe_core
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
-    PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
-
-# Compiler-specific settings
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    target_compile_options(cboe_core PRIVATE -fPIC)
-endif()
 
 # Install rules
 install(TARGETS cboe_core
@@ -54,49 +53,36 @@ install(TARGETS cboe_core
     PUBLIC_HEADER DESTINATION include
 )
 
-install(DIRECTORY include/cboe/
-    DESTINATION include/cboe
+install(DIRECTORY include/cboe
+    DESTINATION include
     FILES_MATCHING PATTERN "*.h"
 )
 
-# Export targets
+# Install CMake package configuration
 install(EXPORT cboe_coreTargets
     FILE cboe_coreTargets.cmake
-    NAMESPACE cboe::
+    NAMESPACE cboe_core::
     DESTINATION lib/cmake/cboe_core
 )
 
-# Create config file
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file(
-    "${CMAKE_CURRENT_BINARY_DIR}/cboe_coreConfigVersion.cmake"
-    VERSION ${PROJECT_VERSION}
-    COMPATIBILITY AnyNewerVersion
-)
-
-configure_package_config_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cboe_coreConfig.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/cboe_coreConfig.cmake"
-    INSTALL_DESTINATION lib/cmake/cboe_core
+configure_file(cmake/cboe_coreConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/cboe_coreConfig.cmake
+    @ONLY
 )
 
 install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/cboe_coreConfig.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/cboe_coreConfigVersion.cmake"
+    ${CMAKE_CURRENT_BINARY_DIR}/cboe_coreConfig.cmake
     DESTINATION lib/cmake/cboe_core
 )
 
 # Enable testing
 enable_testing()
 
-# Find GTest if available
-find_package(GTest QUIET)
-if(GTest_FOUND AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../tests")
+# Add test and benchmark subdirectories
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../tests)
     add_subdirectory(../tests ${CMAKE_CURRENT_BINARY_DIR}/tests)
 endif()
 
-# Find Google Benchmark if available
-find_package(benchmark QUIET)
-if(benchmark_FOUND AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../benchmarks")
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../benchmarks)
     add_subdirectory(../benchmarks ${CMAKE_CURRENT_BINARY_DIR}/benchmarks)
 endif()

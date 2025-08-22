@@ -23,9 +23,9 @@ echo "Building project..."
 make -j$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)
 
 echo "Running benchmarks..."
-if [ -f "cboe_tests" ]; then
+if [ -f "tests/cboe_benchmarks" ]; then
     echo "Running performance benchmarks..."
-    ./cboe_tests --benchmark_format=console --benchmark_out=benchmark_results.json --benchmark_out_format=json
+    ./tests/cboe_benchmarks --benchmark_format=console --benchmark_out=benchmark_results.json --benchmark_out_format=json
     
     echo "Benchmark results saved to benchmark_results.json"
     
