@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  cboe-engine:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: cboe-boe-engine
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    environment:
+      - CBOE_LOG_LEVEL=INFO
+      - CBOE_CONFIG_PATH=/app/data/config.yaml
+    networks:
+      - cboe-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "/app/bin/cboe_tests", "--gtest_list_tests"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  cboe-benchmark:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: cboe-benchmark
+    command: ["/app/bin/cboe_benchmarks", "--benchmark_format=json", "--benchmark_out=/app/logs/benchmark_results.json"]
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - cboe-network
+    profiles:
+      - benchmark
+
+  cboe-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    container_name: cboe-dev
+    command: ["/bin/bash"]
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/app
+      - cboe-build-cache:/app/engine/build
+    networks:
+      - cboe-network
+    profiles:
+      - development
+
+networks:
+  cboe-network:
+    driver: bridge
+
+volumes:
+  cboe-build-cache:
