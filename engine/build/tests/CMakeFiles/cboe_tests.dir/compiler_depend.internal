@@ -285,12 +285,28 @@ tests/CMakeFiles/cboe_tests.dir/FramingEngineTests.cpp.o
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__charconv/to_chars_integral.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__charconv/to_chars_result.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__charconv/traits.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/calendar.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/concepts.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/convert_to_timespec.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/convert_to_tm.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/day.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/duration.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/file_clock.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/hh_mm_ss.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/high_resolution_clock.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/literals.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/month.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/month_weekday.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/monthday.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/statically_widen.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/steady_clock.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/system_clock.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/time_point.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/weekday.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/year.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/year_month.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/year_month_day.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/year_month_weekday.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__compare/common_comparison_category.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__compare/compare_partial_order_fallback.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__compare/compare_strong_order_fallback.h
@@ -682,6 +698,7 @@ tests/CMakeFiles/cboe_tests.dir/FramingEngineTests.cpp.o
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__variant/monostate.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__verbose_abort
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/algorithm
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/any
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/array
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/atomic
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/bit
@@ -689,11 +706,13 @@ tests/CMakeFiles/cboe_tests.dir/FramingEngineTests.cpp.o
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/cassert
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/cctype
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/cerrno
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/chrono
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/climits
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/clocale
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/cmath
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/compare
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/concepts
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/condition_variable
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/cstdarg
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/cstddef
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/cstdint
@@ -711,7 +730,6 @@ tests/CMakeFiles/cboe_tests.dir/FramingEngineTests.cpp.o
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/float.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/functional
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/initializer_list
- /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/iomanip
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/ios
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/iosfwd
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/iostream
@@ -730,6 +748,7 @@ tests/CMakeFiles/cboe_tests.dir/FramingEngineTests.cpp.o
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/ostream
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/ratio
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/set
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/span
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/sstream
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/stddef.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/stdexcept
@@ -905,26 +924,27 @@ tests/CMakeFiles/cboe_tests.dir/FramingEngineTests.cpp.o
  /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include/stddef.h
  /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include/stdint.h
  /Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/include/cboe/FramingEngine.h
- /Users/Ronald/anaconda3/include/gtest/gtest-death-test.h
- /Users/Ronald/anaconda3/include/gtest/gtest-matchers.h
- /Users/Ronald/anaconda3/include/gtest/gtest-message.h
- /Users/Ronald/anaconda3/include/gtest/gtest-param-test.h
- /Users/Ronald/anaconda3/include/gtest/gtest-printers.h
- /Users/Ronald/anaconda3/include/gtest/gtest-test-part.h
- /Users/Ronald/anaconda3/include/gtest/gtest-typed-test.h
- /Users/Ronald/anaconda3/include/gtest/gtest.h
- /Users/Ronald/anaconda3/include/gtest/gtest_pred_impl.h
- /Users/Ronald/anaconda3/include/gtest/gtest_prod.h
- /Users/Ronald/anaconda3/include/gtest/internal/custom/gtest-port.h
- /Users/Ronald/anaconda3/include/gtest/internal/custom/gtest-printers.h
- /Users/Ronald/anaconda3/include/gtest/internal/gtest-death-test-internal.h
- /Users/Ronald/anaconda3/include/gtest/internal/gtest-filepath.h
- /Users/Ronald/anaconda3/include/gtest/internal/gtest-internal.h
- /Users/Ronald/anaconda3/include/gtest/internal/gtest-param-util.h
- /Users/Ronald/anaconda3/include/gtest/internal/gtest-port-arch.h
- /Users/Ronald/anaconda3/include/gtest/internal/gtest-port.h
- /Users/Ronald/anaconda3/include/gtest/internal/gtest-string.h
- /Users/Ronald/anaconda3/include/gtest/internal/gtest-type-util.h
+ /usr/local/include/gtest/gtest-assertion-result.h
+ /usr/local/include/gtest/gtest-death-test.h
+ /usr/local/include/gtest/gtest-matchers.h
+ /usr/local/include/gtest/gtest-message.h
+ /usr/local/include/gtest/gtest-param-test.h
+ /usr/local/include/gtest/gtest-printers.h
+ /usr/local/include/gtest/gtest-test-part.h
+ /usr/local/include/gtest/gtest-typed-test.h
+ /usr/local/include/gtest/gtest.h
+ /usr/local/include/gtest/gtest_pred_impl.h
+ /usr/local/include/gtest/gtest_prod.h
+ /usr/local/include/gtest/internal/custom/gtest-port.h
+ /usr/local/include/gtest/internal/custom/gtest-printers.h
+ /usr/local/include/gtest/internal/gtest-death-test-internal.h
+ /usr/local/include/gtest/internal/gtest-filepath.h
+ /usr/local/include/gtest/internal/gtest-internal.h
+ /usr/local/include/gtest/internal/gtest-param-util.h
+ /usr/local/include/gtest/internal/gtest-port-arch.h
+ /usr/local/include/gtest/internal/gtest-port.h
+ /usr/local/include/gtest/internal/gtest-string.h
+ /usr/local/include/gtest/internal/gtest-type-util.h
 
 tests/CMakeFiles/cboe_tests.dir/SerializerTests.cpp.o
  /Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/tests/SerializerTests.cpp
@@ -1210,12 +1230,28 @@ tests/CMakeFiles/cboe_tests.dir/SerializerTests.cpp.o
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__charconv/to_chars_integral.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__charconv/to_chars_result.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__charconv/traits.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/calendar.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/concepts.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/convert_to_timespec.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/convert_to_tm.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/day.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/duration.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/file_clock.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/hh_mm_ss.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/high_resolution_clock.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/literals.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/month.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/month_weekday.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/monthday.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/statically_widen.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/steady_clock.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/system_clock.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/time_point.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/weekday.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/year.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/year_month.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/year_month_day.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/year_month_weekday.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__compare/common_comparison_category.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__compare/compare_partial_order_fallback.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__compare/compare_strong_order_fallback.h
@@ -1607,6 +1643,7 @@ tests/CMakeFiles/cboe_tests.dir/SerializerTests.cpp.o
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__variant/monostate.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__verbose_abort
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/algorithm
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/any
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/array
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/atomic
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/bit
@@ -1614,11 +1651,13 @@ tests/CMakeFiles/cboe_tests.dir/SerializerTests.cpp.o
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/cassert
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/cctype
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/cerrno
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/chrono
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/climits
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/clocale
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/cmath
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/compare
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/concepts
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/condition_variable
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/cstdarg
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/cstddef
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/cstdint
@@ -1636,7 +1675,6 @@ tests/CMakeFiles/cboe_tests.dir/SerializerTests.cpp.o
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/float.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/functional
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/initializer_list
- /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/iomanip
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/ios
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/iosfwd
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/iostream
@@ -1655,6 +1693,7 @@ tests/CMakeFiles/cboe_tests.dir/SerializerTests.cpp.o
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/ostream
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/ratio
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/set
+ /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/span
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/sstream
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/stddef.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/stdexcept
@@ -1834,24 +1873,25 @@ tests/CMakeFiles/cboe_tests.dir/SerializerTests.cpp.o
  /Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/include/cboe/Messages.h
  /Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/include/cboe/Serializer.h
  /Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/include/cboe/util.h
- /Users/Ronald/anaconda3/include/gtest/gtest-death-test.h
- /Users/Ronald/anaconda3/include/gtest/gtest-matchers.h
- /Users/Ronald/anaconda3/include/gtest/gtest-message.h
- /Users/Ronald/anaconda3/include/gtest/gtest-param-test.h
- /Users/Ronald/anaconda3/include/gtest/gtest-printers.h
- /Users/Ronald/anaconda3/include/gtest/gtest-test-part.h
- /Users/Ronald/anaconda3/include/gtest/gtest-typed-test.h
- /Users/Ronald/anaconda3/include/gtest/gtest.h
- /Users/Ronald/anaconda3/include/gtest/gtest_pred_impl.h
- /Users/Ronald/anaconda3/include/gtest/gtest_prod.h
- /Users/Ronald/anaconda3/include/gtest/internal/custom/gtest-port.h
- /Users/Ronald/anaconda3/include/gtest/internal/custom/gtest-printers.h
- /Users/Ronald/anaconda3/include/gtest/internal/gtest-death-test-internal.h
- /Users/Ronald/anaconda3/include/gtest/internal/gtest-filepath.h
- /Users/Ronald/anaconda3/include/gtest/internal/gtest-internal.h
- /Users/Ronald/anaconda3/include/gtest/internal/gtest-param-util.h
- /Users/Ronald/anaconda3/include/gtest/internal/gtest-port-arch.h
- /Users/Ronald/anaconda3/include/gtest/internal/gtest-port.h
- /Users/Ronald/anaconda3/include/gtest/internal/gtest-string.h
- /Users/Ronald/anaconda3/include/gtest/internal/gtest-type-util.h
+ /usr/local/include/gtest/gtest-assertion-result.h
+ /usr/local/include/gtest/gtest-death-test.h
+ /usr/local/include/gtest/gtest-matchers.h
+ /usr/local/include/gtest/gtest-message.h
+ /usr/local/include/gtest/gtest-param-test.h
+ /usr/local/include/gtest/gtest-printers.h
+ /usr/local/include/gtest/gtest-test-part.h
+ /usr/local/include/gtest/gtest-typed-test.h
+ /usr/local/include/gtest/gtest.h
+ /usr/local/include/gtest/gtest_pred_impl.h
+ /usr/local/include/gtest/gtest_prod.h
+ /usr/local/include/gtest/internal/custom/gtest-port.h
+ /usr/local/include/gtest/internal/custom/gtest-printers.h
+ /usr/local/include/gtest/internal/gtest-death-test-internal.h
+ /usr/local/include/gtest/internal/gtest-filepath.h
+ /usr/local/include/gtest/internal/gtest-internal.h
+ /usr/local/include/gtest/internal/gtest-param-util.h
+ /usr/local/include/gtest/internal/gtest-port-arch.h
+ /usr/local/include/gtest/internal/gtest-port.h
+ /usr/local/include/gtest/internal/gtest-string.h
+ /usr/local/include/gtest/internal/gtest-type-util.h
 

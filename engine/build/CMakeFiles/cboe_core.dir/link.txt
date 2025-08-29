@@ -1,2 +1,2 @@
-/Library/Developer/CommandLineTools/usr/bin/ar qc libcboe_core.a CMakeFiles/cboe_core.dir/src/Serializer.cpp.o CMakeFiles/cboe_core.dir/src/Deserializer.cpp.o CMakeFiles/cboe_core.dir/src/FramingEngine.cpp.o CMakeFiles/cboe_core.dir/src/Buffer.cpp.o CMakeFiles/cboe_core.dir/src/Allocator.cpp.o
+/Library/Developer/CommandLineTools/usr/bin/ar qc libcboe_core.a CMakeFiles/cboe_core.dir/src/Allocator.cpp.o CMakeFiles/cboe_core.dir/src/Buffer.cpp.o CMakeFiles/cboe_core.dir/src/Deserializer.cpp.o CMakeFiles/cboe_core.dir/src/FramingEngine.cpp.o CMakeFiles/cboe_core.dir/src/Serializer.cpp.o
 /Library/Developer/CommandLineTools/usr/bin/ranlib libcboe_core.a

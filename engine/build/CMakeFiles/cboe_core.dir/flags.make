@@ -4,9 +4,9 @@
 # compile CXX with /Library/Developer/CommandLineTools/usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/include -I/Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/src
+CXX_INCLUDES = -I/Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/include
 
-CXX_FLAGSx86_64 =  -Wall -Wextra -Wpedantic -g -O0 -DDEBUG -std=gnu++17 -arch x86_64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk
+CXX_FLAGSx86_64 =  -Wall -Wextra -O2 -g -std=gnu++17 -arch x86_64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk
 
-CXX_FLAGS =  -Wall -Wextra -Wpedantic -g -O0 -DDEBUG -std=gnu++17 -arch x86_64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk
+CXX_FLAGS =  -Wall -Wextra -O2 -g -std=gnu++17 -arch x86_64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk
 

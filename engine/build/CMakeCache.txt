@@ -137,7 +137,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=CBOE_BOE_Engine
+CMAKE_PROJECT_NAME:STATIC=cboe_core
 
 //Value Computed by CMake
 CMAKE_PROJECT_VERSION:STATIC=1.0.0
@@ -224,6 +224,15 @@ GTest_DIR:PATH=/Users/Ronald/anaconda3/lib/cmake/GTest
 
 //The directory containing a CMake configuration file for benchmark.
 benchmark_DIR:PATH=/Users/Ronald/anaconda3/lib/cmake/benchmark
+
+//Value Computed by CMake
+cboe_core_BINARY_DIR:STATIC=/Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/build
+
+//Value Computed by CMake
+cboe_core_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+cboe_core_SOURCE_DIR:STATIC=/Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine
 
 
 ########################

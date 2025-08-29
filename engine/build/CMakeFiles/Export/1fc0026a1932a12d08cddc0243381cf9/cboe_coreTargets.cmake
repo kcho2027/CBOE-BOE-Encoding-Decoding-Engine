@@ -19,7 +19,7 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 set(_cmake_targets_defined "")
 set(_cmake_targets_not_defined "")
 set(_cmake_expected_targets "")
-foreach(_cmake_expected_target IN ITEMS cboe::cboe_core)
+foreach(_cmake_expected_target IN ITEMS cboe_core::cboe_core)
   list(APPEND _cmake_expected_targets "${_cmake_expected_target}")
   if(TARGET "${_cmake_expected_target}")
     list(APPEND _cmake_targets_defined "${_cmake_expected_target}")
@@ -55,10 +55,10 @@ if(_IMPORT_PREFIX STREQUAL "/")
   set(_IMPORT_PREFIX "")
 endif()
 
-# Create imported target cboe::cboe_core
-add_library(cboe::cboe_core STATIC IMPORTED)
+# Create imported target cboe_core::cboe_core
+add_library(cboe_core::cboe_core STATIC IMPORTED)
 
-set_target_properties(cboe::cboe_core PROPERTIES
+set_target_properties(cboe_core::cboe_core PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
 )
 

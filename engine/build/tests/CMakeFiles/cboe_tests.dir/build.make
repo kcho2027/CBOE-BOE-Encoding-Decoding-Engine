@@ -109,8 +109,6 @@ tests/cboe_tests: tests/CMakeFiles/cboe_tests.dir/SerializerTests.cpp.o
 tests/cboe_tests: tests/CMakeFiles/cboe_tests.dir/FramingEngineTests.cpp.o
 tests/cboe_tests: tests/CMakeFiles/cboe_tests.dir/build.make
 tests/cboe_tests: libcboe_core.a
-tests/cboe_tests: /Users/Ronald/anaconda3/lib/libgtest_main.1.10.0.dylib
-tests/cboe_tests: /Users/Ronald/anaconda3/lib/libgtest.1.10.0.dylib
 tests/cboe_tests: tests/CMakeFiles/cboe_tests.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable cboe_tests"
 	cd /Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/build/tests && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/cboe_tests.dir/link.txt --verbose=$(VERBOSE)

@@ -46,11 +46,19 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE FILE FILES "/Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/include/cboe/*.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE FILE FILES
+    "/Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/include/cboe/Allocator.h"
+    "/Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/include/cboe/Buffer.h"
+    "/Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/include/cboe/Deserializer.h"
+    "/Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/include/cboe/FramingEngine.h"
+    "/Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/include/cboe/Messages.h"
+    "/Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/include/cboe/Serializer.h"
+    "/Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/include/cboe/util.h"
+    )
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/cboe" TYPE DIRECTORY FILES "/Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/include/cboe/" FILES_MATCHING REGEX "/[^/]*\\.h$")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/include/cboe" FILES_MATCHING REGEX "/[^/]*\\.h$")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -77,10 +85,7 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/cboe_core" TYPE FILE FILES
-    "/Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/build/cboe_coreConfig.cmake"
-    "/Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/build/cboe_coreConfigVersion.cmake"
-    )
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/cboe_core" TYPE FILE FILES "/Users/Ronald/Documents/GitHub/CBOE-BOE-Encoding-Decoding-Engine/engine/build/cboe_coreConfig.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
